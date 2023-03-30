@@ -1,0 +1,47 @@
+!
+
+# eth0
+interface eth0
+    ip address 10.1.1.1/30
+exit
+!
+
+# eth1
+interface eth1
+    ip address 10.1.1.5/30
+exit
+!
+
+# eth2
+interface eth2
+    ip address 10.1.1.9/30
+exit
+!
+
+# lo
+interface lo
+    ip address 1.1.1.1/32
+exit
+!
+
+# BGP
+router bgp 1
+    neighbor PEER_GRP1 peer-group
+    neighbor PEER_GRP1 remote-as 1
+    neighbor PEER_GRP1 update-source lo
+    bgp listen range 1.1.1.0/29 peer-group PEER_GRP1
+    !
+    address-family l2vpn evpn
+        neighbor PEER_GRP1 activate
+        neighbor PEER_GRP1 route-reflector-client
+        advertise-all-vni
+    exit-address-family
+exit
+!
+
+# OSPF
+router ospf
+    network 0.0.0.0/0 area 0
+
+!
+end
