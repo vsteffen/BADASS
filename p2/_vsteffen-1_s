@@ -1,0 +1,26 @@
+auto eth0
+iface eth0 inet static
+    address 10.1.1.1
+    netmask 255.255.255.0
+
+auto eth1
+iface eth1 inet manual
+    up ip link set eth1 up
+    down ip link set eth1 down
+
+auto vxlan10
+iface vxlan10 inet manual
+   up ip link add name vxlan10 type vxlan id 10 dev eth0 local 10.1.1.1 remote 10.1.1.2 dstport 0
+   up ip link set vxlan10 up
+   down ip link set vxlan10 down
+   post-down ip link del vxlan10
+
+auto br0
+iface br0 inet manual
+    require vxlan10 eth1
+    pre-up brctl addbr br0
+    up ip link set br0 up
+    up brctl addif br0 eth1
+    up brctl addif br0 vxlan10
+    down ip link set br0 down
+    down brctl delbr br0
