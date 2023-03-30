@@ -1,2 +1,2 @@
-docker build -t vsteffen_host -f _vsteffen-1_host .
-docker build -t vsteffen_routeur -f _vsteffen-2 .
+docker build -t host_vsteffen -f _vsteffen-1_host .
+docker build -t routeur_vsteffen -f _vsteffen-2 .
